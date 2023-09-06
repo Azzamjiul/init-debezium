@@ -1,0 +1,33 @@
+{
+  "name": "tnt-job",
+  "config": {
+    "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+    "tasks.max": "1",
+    "topics": "tbl_job",
+    "connection.url": "jdbc:mysql://tnt_db:3306/tnt_db",
+    "connection.user":"root",
+    "connection.password":"debezium",
+    "auto.create": "true",
+    "insert.mode": "upsert",
+    "delete.enabled": "true",
+    "pk.fields": "id",
+    "pk.mode": "record_key",
+
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "true",
+    
+    "transforms": "unwrap, ConvertCreatedDate, ConvertUpdatedDate",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.unwrap.drop.tombstones":"false",
+
+    "transforms.ConvertCreatedDate.type": "org.apache.kafka.connect.transforms.TimestampConverter$Value",
+    "transforms.ConvertCreatedDate.target.type": "Timestamp",
+    "transforms.ConvertCreatedDate.field": "create_date",
+    "transforms.ConvertCreatedDate.format": "yyyy-MM-dd'T'HH:mm:ssX",
+
+    "transforms.ConvertUpdatedDate.type": "org.apache.kafka.connect.transforms.TimestampConverter$Value",
+    "transforms.ConvertUpdatedDate.target.type": "Timestamp",
+    "transforms.ConvertUpdatedDate.field": "update_date",
+    "transforms.ConvertUpdatedDate.format": "yyyy-MM-dd'T'HH:mm:ssX"
+  }
+}

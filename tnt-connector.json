@@ -1,0 +1,28 @@
+{
+  "name": "tnt-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+    "topics": "tnt-topic",
+    "tasks.max": "1",
+    "database.hostname": "talenta_db",
+    "database.port": "3306",
+    "database.user": "root",
+    "database.password": "debezium",
+    "database.server.id": "184054",
+    "database.server.name": "dbserver1",
+    "database.include.list": "talenta_db",
+    "database.history.kafka.bootstrap.servers": "broker:29092",
+    "database.history.kafka.topic": "schema-changes.talenta_db",
+    "table.include.list":"talenta_db.tbl_user, talenta_db.tbl_job",
+    "time.precision.mode":"connect",
+    
+    "transforms": "route",
+    "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
+    "transforms.route.regex": "([^.]+)\\.([^.]+)\\.([^.]+)",
+    "transforms.route.replacement": "$3",
+
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "true"
+  }
+}
+
